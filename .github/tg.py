@@ -15,7 +15,7 @@ mediadocuments = [
 with open("commit.json") as f:
     data = load(f)
 
-caption = f"""**Libretube {data['sha'][0:7]} // Alpha**
+caption = f"""**Libretube {data['sha'][:7]} // Alpha**
 
 <a href="{data['html_url']}">{data['commit']['message']}</a>
 

@@ -5,7 +5,7 @@ import tgconfig
 with open("../.github/commit.json") as f:
     data = load(f)
 
-message = f"Commit {data['sha'][0:7]}, signed off by: {data['commit']['author']['name']}"
+message = f"Commit {data['sha'][:7]}, signed off by: {data['commit']['author']['name']}"
 
 files, signed_files, unsigned_files = listdir(), [], []
 for file in files:

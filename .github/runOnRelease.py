@@ -16,11 +16,10 @@ TG_CHANNEL = "LibreTube"
 def get_changelog():
     url = "https://api.github.com/repos/libre-tube/LibreTube/contents/fastlane/metadata/android/en-US/changelogs"
     data = get(url).json()
-    last_log = max([int(file["name"].replace(".txt", "")) for file in data])
-    log = get(
+    last_log = max(int(file["name"].replace(".txt", "")) for file in data)
+    return get(
         f"https://github.com/libre-tube/LibreTube/raw/master/fastlane/metadata/android/en-US/changelogs/{last_log}.txt"
     ).text
-    return log
 
 
 def download(url, name):
@@ -46,11 +45,12 @@ buttons = InlineKeyboardMarkup(
 
 
 _files, files, result, tag = req.get("assets"), [], req.get("body"), req.get("tag_name")
-for file in _files:
-    files.append(
-        InputMediaDocument(download(file.get("browser_download_url"), file.get("name")))
+files.extend(
+    InputMediaDocument(
+        download(file.get("browser_download_url"), file.get("name"))
     )
-
+    for file in _files
+)
 caption = f"**LibreTube {tag} // Privacy Simplified**\n\n<u>What's Changed?</u>\n```{get_changelog()}```"
 with Client("bot", TG_API_ID, TG_API_HASH, bot_token=TG_TOKEN) as app:
     app.send_photo(
